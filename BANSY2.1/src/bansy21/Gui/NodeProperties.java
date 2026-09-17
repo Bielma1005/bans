@@ -83,7 +83,7 @@ public class NodeProperties extends JDialog
 		    str1 = new String(  df.format( d1 )  );
 		    d1   = new Double( str1 );
 		    try{ table.setValueAt( d1, 1, 1 ); } 
-		    catch( Exception e ) { System.out.println( "Excepci�n: " + e.toString() ); }
+			catch( Exception e ) { System.out.println( "Excepci\u00f3n: " + e.toString() ); }
 		    System.out.println( table.getValueAt(r, c)  );
 		  }
 		*/
@@ -150,8 +150,8 @@ public class NodeProperties extends JDialog
 
 		b1.setVisible(true);
 		b2.setVisible(true);
-		b1.setToolTipText("Acepta los cambios y cierra el di�logo");
-		b2.setToolTipText("Cancela los cambios y cierra el di�logo");
+		b1.setToolTipText("Acepta los cambios y cierra el di\u00e1logo");
+		b2.setToolTipText("Cancela los cambios y cierra el di\u00e1logo");
 		table.setVisible(true);
 		tipoNodo.setVisible(true);
 		tipoNodo.setToolTipText("Selecciona el Tipo de Nodo");

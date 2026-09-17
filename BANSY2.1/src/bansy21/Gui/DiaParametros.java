@@ -32,7 +32,7 @@ public class DiaParametros extends JDialog
 	public DiaParametros(frmPrincipal padre)
 
 	{
-		super(padre,"Par�metros de Aprendizaje - BayesN", true);
+		super(padre,"Par\u00e1metros de Aprendizaje - BayesN", true);
 		getContentPane().setLayout(null);
 		b1.addActionListener(new ActionAceptar());
 		b2.addActionListener(new ActionCancelar());
@@ -60,7 +60,7 @@ public class DiaParametros extends JDialog
 	      DecimalFormat df = new DecimalFormat( "#" );
 	      Double  AlfaG       = new Double(  padre.bPE.alfaG * 100 ); 
 	      Integer Profundidad = new Integer( padre.bPE.profundidad );
-	      Double  GIM         = new Double(  padre.bPE.minPorcGan  );  //Ganancia de Informacion M�nima
+	      Double  GIM         = new Double(  padre.bPE.minPorcGan  );  //Ganancia de Informacion Minima
 	      t1.setText( df.format( AlfaG.doubleValue() ) ); 
       	t2.setText( Profundidad.toString()     );
 	      t3.setText( df.format( GIM.doubleValue()   ) );
@@ -70,8 +70,8 @@ public class DiaParametros extends JDialog
 		t3.setVisible(true);
 		b1.setVisible(true);
 		b2.setVisible(true);
-		b1.setToolTipText("Acepta los cambios y cierra el di�logo");
-		b2.setToolTipText("Cancela los cambios y cierra el di�logo");
+		b1.setToolTipText("Acepta los cambios y cierra el di\u00e1logo");
+		b2.setToolTipText("Cancela los cambios y cierra el di\u00e1logo");
 		
 		((JPanel)getContentPane()).setBorder(new EtchedBorder(EtchedBorder.RAISED));
 		Rectangle screenRect = this.getGraphicsConfiguration().getBounds();

@@ -117,7 +117,7 @@ public class nodePrope extends javax.swing.JFrame {
         jButton1.setText("OK");
         getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 220, -1, -1));
 
-        jButton2.setText("Cancel");
+        jButton2.setText("Cancelar");
         getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 220, -1, -1));
 
         pack();

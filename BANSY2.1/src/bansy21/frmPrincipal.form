@@ -191,12 +191,12 @@
         </Menu>
         <Menu class="javax.swing.JMenu" name="jmProbabilidades">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Probailidades"/>
+            <Property name="text" type="java.lang.String" value="Probabilidades"/>
           </Properties>
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="jmTabProbCond">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Tablas de probailidades condicionales"/>
+                <Property name="text" type="java.lang.String" value="Tablas de probabilidades condicionales"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jmTabProbCondActionPerformed"/>
@@ -335,7 +335,7 @@
                 </MenuItem>
                 <MenuItem class="javax.swing.JMenuItem" name="jmMenuMosaicoHorizontal">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Mosaico Horizantal"/>
+                    <Property name="text" type="java.lang.String" value="Mosaico Horizontal"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jmMenuMosaicoHorizontalActionPerformed"/>

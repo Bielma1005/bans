@@ -393,8 +393,8 @@ public class frmPrincipal extends javax.swing.JFrame {
 
         jmenuPrincipal.add(jmAprendizaje);
 
-        jmProbabilidades.setText("Probailidades");
-        jmTabProbCond.setText("Tablas de probailidades condicionales");
+		jmProbabilidades.setText("Probabilidades");
+		jmTabProbCond.setText("Tablas de probabilidades condicionales");
         jmTabProbCond.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jmTabProbCondActionPerformed(evt);
@@ -526,7 +526,7 @@ public class frmPrincipal extends javax.swing.JFrame {
 
         jmMenuOrgVen.add(jmMenuRejilla);
 
-        jmMenuMosaicoHorizontal.setText("Mosaico Horizantal");
+		jmMenuMosaicoHorizontal.setText("Mosaico Horizontal");
         jmMenuMosaicoHorizontal.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jmMenuMosaicoHorizontalActionPerformed(evt);
@@ -979,7 +979,7 @@ public class frmPrincipal extends javax.swing.JFrame {
 		else
 		{			
 			//enviar un mensaje en el que le diga que debe agregar un red nueva antes
-			JOptionPane.showMessageDialog(this,"No ha seleccionado una red. Seleccione la ventana que contiene la red bayesiana que sea evaluar","Error en la selecci�n",JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(this,"No ha seleccionado una red. Seleccione la ventana que contiene la red bayesiana que desea evaluar","Error en la selecci\u00f3n",JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
 
@@ -1024,7 +1024,7 @@ public class frmPrincipal extends javax.swing.JFrame {
 		else
 		{			
 			//enviar un mensaje en el que le diga que debe agregar un red nueva antes
-			JOptionPane.showMessageDialog(this,"No ha seleccionado una red. Seleccione la ventana que contiene la red bayesiana que sea evaluar","Error en la selecci�n",JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(this,"No ha seleccionado una red. Seleccione la ventana que contiene la red bayesiana que desea evaluar","Error en la selecci\u00f3n",JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
 
@@ -1044,7 +1044,7 @@ public class frmPrincipal extends javax.swing.JFrame {
 		else
 		{
 			//enviar un mensaje en el que le diga que debe agregar un red nueva antes
-			JOptionPane.showMessageDialog(this,"No ha seleccionado una red. Seleccione la ventana que contiene la red bayesiana que sea evaluar","Error en la selecci�n",JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(this,"No ha seleccionado una red. Seleccione la ventana que contiene la red bayesiana que desea evaluar","Error en la selecci\u00f3n",JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
 //-----------------------------------------------------------------------------------------
@@ -1092,7 +1092,7 @@ public class frmPrincipal extends javax.swing.JFrame {
 			else
 			{
 				//enviar un mensaje en el que le diga que debe agregar un red nueva antes
-				JOptionPane.showMessageDialog(this,"No ha seleccionado una red. Seleccione la ventana que contiene la red bayesiana que sea evaluar","Error en la selecci�n",JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(this,"No ha seleccionado una red. Seleccione la ventana que contiene la red bayesiana que desea evaluar","Error en la selecci\u00f3n",JOptionPane.INFORMATION_MESSAGE);
 			}
 		}
 // Agregada por AAT
@@ -1101,7 +1101,7 @@ public class frmPrincipal extends javax.swing.JFrame {
 	}
 //-----------------------------------------------------------------------------------------
 	/**
-	* M�todo de inferencia general
+		* Metodo de inferencia general
 	*/
 	private void inferenciaGeneral()
 	{
@@ -1114,8 +1114,8 @@ public class frmPrincipal extends javax.swing.JFrame {
 		que puede tomar el nodo, para que el usuario seleccione uno, lo mismo se hace para los nodos evidencia
 		(un combo para cada uno)
 
-		ya que se selecciono, entonces echar a andar el metodo para calcular la probabildiad, que prodria ser 
-		en la misma ventana, de esta forma el usuario p�rdria cambiar los valores y recalcular
+		ya que se selecciono, entonces echar a andar el metodo para calcular la probabilidad, que podria ser
+		en la misma ventana, de esta forma el usuario podria cambiar los valores y recalcular
 		si quiere agregar mas nodos de evidencia, entonces tendra que cerrar la ventana	
 
 		*/
@@ -1147,7 +1147,7 @@ public class frmPrincipal extends javax.swing.JFrame {
 		else
 		{
 			//enviar un mensaje en el que le diga que debe agregar un red nueva antes
-			JOptionPane.showMessageDialog(this,"No ha seleccionado una red. Seleccione la ventana que contiene la red bayesiana que sea evaluar","Error en la selecci�n",JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(this,"No ha seleccionado una red. Seleccione la ventana que contiene la red bayesiana que desea evaluar","Error en la selecci\u00f3n",JOptionPane.INFORMATION_MESSAGE);
 		}
 
 
@@ -1167,7 +1167,7 @@ public class frmPrincipal extends javax.swing.JFrame {
 				BMeasure bm=new BMeasure();
 				bm.red=redF.redPanel.red;
 				bm.casos=bPE.casos;
-				createMonitor("M�trica Bayesiana", true, bPE.casos.size()+bPE.numVariables);
+				createMonitor("M\u00e9trica Bayesiana", true, bPE.casos.size()+bPE.numVariables);
 				bm.pMonitor=pMonitor;
 				bm.start();
                                 this.setSelectedFrame(pMonitor);
@@ -1177,7 +1177,7 @@ public class frmPrincipal extends javax.swing.JFrame {
 		else
 		{
 			//enviar un mensaje en el que le diga que debe agregar un red nueva antes
-			JOptionPane.showMessageDialog(this,"No ha seleccionado una red. Seleccione la ventana que contiene la red bayesiana que sea evaluar","Error en la selecci�n",JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(this,"No ha seleccionado una red. Seleccione la ventana que contiene la red bayesiana que desea evaluar","Error en la selecci\u00f3n",JOptionPane.INFORMATION_MESSAGE);
 		}
                 createMenuVentana();
 	}
@@ -1205,7 +1205,7 @@ public class frmPrincipal extends javax.swing.JFrame {
 		else
 		{
 			//enviar un mensaje en el que le diga que debe agregar un red nueva antes     3025.8915996018195
-			JOptionPane.showMessageDialog(this,"No ha seleccionado una red. Seleccione la ventana que contiene la red bayesiana que sea evaluar","Error en la selecci�n",JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(this,"No ha seleccionado una red. Seleccione la ventana que contiene la red bayesiana que desea evaluar","Error en la selecci\u00f3n",JOptionPane.INFORMATION_MESSAGE);
 		}
                  createMenuVentana();
 	}
@@ -1234,7 +1234,7 @@ public class frmPrincipal extends javax.swing.JFrame {
 		else
 		{
 			//enviar un mensaje en el que le diga que debe agregar un red nueva antes     3025.8915996018195
-			JOptionPane.showMessageDialog(this,"No ha seleccionado una red. Seleccione la ventana que contiene la red bayesiana que sea evaluar","Error en la selecci�n",JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(this,"No ha seleccionado una red. Seleccione la ventana que contiene la red bayesiana que desea evaluar","Error en la selecci\u00f3n",JOptionPane.INFORMATION_MESSAGE);
 		}
                  createMenuVentana();
 	}
@@ -1491,7 +1491,7 @@ public class frmPrincipal extends javax.swing.JFrame {
 					getValues();
 					
 					Clasificacion c1=new Clasificacion();
-					createMonitor("Clasificaci�n",true,100);
+					createMonitor("Clasificacion",true,100);
 					c1.pMonitor=pMonitor;
 					c1.cas=bPE.casos.size();
 					c1.casos=bPE.casos;
@@ -1541,7 +1541,7 @@ public class frmPrincipal extends javax.swing.JFrame {
 				String message=xml.getErrorMessage();
 				if (message==null)
 					message="El archivo no contiene una red válida.";
-				JOptionPane.showMessageDialog(this,message,"Error al abrir la red",JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(this,message,"Error al abrir la red",JOptionPane.ERROR_MESSAGE);
 				return;
 			}
 			bPE.inicio=red.inicio;
@@ -1620,7 +1620,7 @@ public class frmPrincipal extends javax.swing.JFrame {
 		}
 		else
 		{
-			JOptionPane.showMessageDialog(this,"You need to load data firts","Data needed",JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(this,"You need to load data first","Data needed",JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
 
@@ -1818,7 +1818,7 @@ public class frmPrincipal extends javax.swing.JFrame {
 		}
 		else
 		{
-			JOptionPane.showMessageDialog(this,"You need to load data firts","Data needed",JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(this,"You need to load data first","Data needed",JOptionPane.INFORMATION_MESSAGE);
 		}
 
 	}
@@ -2517,7 +2517,7 @@ public class frmPrincipal extends javax.swing.JFrame {
 	}
         
         // --------------------------------------------------------------------------	
-// M�todos para Organizar Ventanas
+// Metodos para Organizar Ventanas
 // --------------------------------------------------------------------------	
 	public void VenOrgMenuCascada()
       { int ancho, alto, delta=30;

@@ -105,7 +105,7 @@ public class ShowerTable extends JInternalFrame
             texto = col2  + ", Probabilidad, " + "\r" + texto;
 
 		jtable=new JTable(temp,columnas);
-		jtable.setToolTipText("Tabla de distribuci�n conjunta");
+		jtable.setToolTipText("Tabla de distribuci\u00f3n conjunta");
 		JScrollPane p1=new JScrollPane(jtable);
 		p1.setBorder(new BevelBorder (BevelBorder.RAISED));	
       	content.add(BtnGuardarComo, BorderLayout.NORTH);

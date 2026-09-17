@@ -67,7 +67,7 @@ import org.netbeans.lib.awtextra.*;
         setIconifiable(true);
         setMaximizable(false);
         setPreferredSize( new Dimension(530, 230) );
-        setTitle("Parametros");
+        setTitle("Par\u00e1metros");
         setResizable(false);
 	  setSize(520, 230);
         setVisible(true);
@@ -139,7 +139,7 @@ import org.netbeans.lib.awtextra.*;
 
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel6.setText("% Ganancia de Inf m\u00ednima");
-        jLabel6.setToolTipText("Porcentage de Ganancia de Informaci\u00f3n M\u00ednima");
+        jLabel6.setToolTipText("Porcentaje de Ganancia de Informaci\u00f3n M\u00ednima");
 //        jPanel2.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 110, -1, -1));
         jPanel2.add(jLabel6, new AbsoluteConstraints(20, 110, -1, -1));
 
@@ -197,7 +197,7 @@ import org.netbeans.lib.awtextra.*;
 
       AlfaG       = new Double(  hta.bPE.alfaG * 100 ); 
       Profundidad = new Integer( hta.bPE.profundidad );
-      GIM         = new Double(  hta.bPE.minPorcGan  );  //Ganancia de Informacion Mínima
+        GIM         = new Double(  hta.bPE.minPorcGan  );  //Ganancia de Informacion Minima
 
       jTextField_Variables.setText( Variables.toString() ); 
       jTextField_Casos.setText(     Casos.toString()     ); 
@@ -211,7 +211,7 @@ import org.netbeans.lib.awtextra.*;
     private void Btn_AceptarActionPerformed(java.awt.event.ActionEvent evt) {
       AlfaG       = new Double(  jTextField_AlfaG.getText()       );
       Profundidad = new Integer( jTextField_Profundidad.getText() );
-      GIM         = new Double(  jTextField_GIM.getText()         );  //Ganancia de Informacion Mínima
+        GIM         = new Double(  jTextField_GIM.getText()         );  //Ganancia de Informacion Minima
       Decimales   = new Integer( jTextField_Decimales.getText()   );
 
       hta.bPE.alfaG       = AlfaG.doubleValue() / 100;
@@ -251,7 +251,7 @@ import org.netbeans.lib.awtextra.*;
 
     private javax.swing.JTextField jTextField_AlfaG;
     private javax.swing.JTextField jTextField_Profundidad;
-    private javax.swing.JTextField jTextField_GIM; //Ganancia de Informacion Mínima
+        private javax.swing.JTextField jTextField_GIM; //Ganancia de Informacion Minima
 
     public frmPrincipal hta;
     public Integer Variables;
@@ -259,7 +259,7 @@ import org.netbeans.lib.awtextra.*;
     public Integer Decimales;
     public Double  AlfaG;
     public Integer Profundidad;
-    public Double  GIM; //Ganancia de Informacion Mínima
+        public Double  GIM; //Ganancia de Informacion Minima
 
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

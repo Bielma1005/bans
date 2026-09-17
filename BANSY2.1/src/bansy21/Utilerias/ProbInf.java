@@ -318,7 +318,7 @@ public class ProbInf
 						varValues[0]=varDep.values.elementAt(i);
 						varValues[1]=var.values.elementAt(j);
 
-						//probailidad conjunta condicional
+						//probabilidad conjunta condicional
 					//	double pcc=probCondi(variables,varValues,nodos,values);
 
 						double[] reg=probCondi(varDep, varDep.values.elementAt(i), var, var.values.elementAt(j), nodos, values); 
@@ -645,17 +645,17 @@ public class ProbInf
 							}
 						}
 					}			
-					if(values[0]!=null)//aqui ya se tiene la siguiente combinación
+					if(values[0]!=null)//aqui ya se tiene la siguiente combinacion
 					{
 						for (int i=0;i<valores;i++)
 						{
 							//calcular la probabilidad condicional de cada uno de los valores de la
-							//variable en cuestión, dada la combinación actual de los padres
+							//variable en cuestion, dada la combinacion actual de los padres
 							temp.table[cont][i]=new Double(probCondi(temp,temp.values.elementAt(i),nodos,values));
 						}
 						for (int i=0;i<values.length;i++)
 						{
-							//guardar la combinación de los padres
+							//guardar la combinacion de los padres
 							temp.parentComb[cont][i]=(String)values[i];							
 						}
 						cont++;
@@ -769,7 +769,7 @@ public class ProbInf
 						varValues[0]=varDep.values.elementAt(i);
 						varValues[1]=var.values.elementAt(j);
 
-						//probailidad conjunta condicional
+						//probabilidad conjunta condicional
 					//	double pcc=probCondi(variables,varValues,nodos,values);
 
 						double[] reg=probCondi(varDep, varDep.values.elementAt(i), var, var.values.elementAt(j), nodos, values); 

@@ -315,7 +315,7 @@ public class Archivo
 		 Node temp=red.inicio;
 		 red.inArco=new Arco();
 		 Arco tempA=red.inArco;
-		 //funcionar� como una pila
+		 //funcionara como una pila
 		 Vector llaves=new Vector();
 
 		String lin, deli, next;
@@ -364,7 +364,7 @@ public class Archivo
 						 }
 					}
 					
-					//hay que ver si en el paso anterior no se lee por error un nodo, si es asi hay que poner algo que recupere esa informaci�n
+					//hay que ver si en el paso anterior no se lee por error un nodo, si es asi hay que poner algo que recupere esa informacion
 					//empezar a leer los nodos
 									
 				}

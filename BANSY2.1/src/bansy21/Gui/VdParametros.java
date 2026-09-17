@@ -69,7 +69,7 @@ public class VdParametros extends javax.swing.JDialog {
 
         getContentPane().setLayout(new AbsoluteLayout());
 
-        setTitle("Parametros");
+        setTitle("Par\u00e1metros");
         setModal(true);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -125,7 +125,7 @@ public class VdParametros extends javax.swing.JDialog {
 
         jLabel_GIM.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel_GIM.setText("% Ganancia de Inf m\u00ednima");
-        jLabel_GIM.setToolTipText("Porcentage de Ganancia de Informaci\u00f3n M\u00ednima");
+        jLabel_GIM.setToolTipText("Porcentaje de Ganancia de Informaci\u00f3n M\u00ednima");
         jPanel2.add(jLabel_GIM, new AbsoluteConstraints(20, 110, -1, -1));
 
         jTextField_AlfaG.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
@@ -172,7 +172,7 @@ public class VdParametros extends javax.swing.JDialog {
 
       AlfaG       = new Double(  hta.bPE.alfaG * 100 ); 
       Profundidad = new Integer( hta.bPE.profundidad );
-      GIM         = new Double(  hta.bPE.minPorcGan  );  //Ganancia de Informacion Mínima
+    GIM         = new Double(  hta.bPE.minPorcGan  );  //Ganancia de Informacion Minima
 
       jTextField_Variables.setText( Variables.toString() ); 
       jTextField_Casos.setText(     Casos.toString()     ); 
@@ -187,7 +187,7 @@ public class VdParametros extends javax.swing.JDialog {
     private void Btn_AceptarActionPerformed(java.awt.event.ActionEvent evt) {                                            
       AlfaG       = new Double(  jTextField_AlfaG.getText()       );
       Profundidad = new Integer( jTextField_Profundidad.getText() );
-      GIM         = new Double(  jTextField_GIM.getText()         );  //Ganancia de Informacion Mínima
+    GIM         = new Double(  jTextField_GIM.getText()         );  //Ganancia de Informacion Minima
       Decimales   = new Integer( jTextField_Decimales.getText()   );
 
       hta.bPE.alfaG       = AlfaG.doubleValue() / 100;
@@ -225,7 +225,7 @@ public class VdParametros extends javax.swing.JDialog {
     public Integer Decimales;
     public Double  AlfaG;
     public Integer Profundidad;
-    public Double  GIM; //Ganancia de Informacion Mínima
+    public Double  GIM; //Ganancia de Informacion Minima
 
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel jLabel_Variables;     

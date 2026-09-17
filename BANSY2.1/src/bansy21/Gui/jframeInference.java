@@ -67,9 +67,9 @@ public class jframeInference extends javax.swing.JInternalFrame {
     }
     
     
-// <editor-fold defaultstate="collapsed" desc=" Métodos para generar el texto de las probabilidades ">
+// <editor-fold defaultstate="collapsed" desc=" Metodos para generar el texto de las probabilidades ">
     
-     /** Este método se encarga de actualizar el texto de probabilidad que se esta calculando*/
+    /** Este metodo se encarga de actualizar el texto de probabilidad que se esta calculando*/
     public void calProb()
 	{
 		Vector vj=new Vector();
@@ -128,7 +128,7 @@ public class jframeInference extends javax.swing.JInternalFrame {
       upDateOutPut();
     }
     
-    /** Este método se encarga de actualizar el texto de probabilidad que se esta calculando*/
+    /** Este metodo se encarga de actualizar el texto de probabilidad que se esta calculando*/
     public void upDateOutputString()
 	{
 		Vector vj=new Vector();
@@ -597,7 +597,7 @@ public class jframeInference extends javax.swing.JInternalFrame {
     
     // </editor-fold>
     
-// <editor-fold defaultstate="collapsed" desc="Declaración de los atributos (variables) de la clase">
+// <editor-fold defaultstate="collapsed" desc="Declaracion de los atributos (variables) de la clase">
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
