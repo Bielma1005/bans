@@ -1,0 +1,42 @@
+package bansy21.Red;
+
+import java.util.Vector;
+import java.io.Serializable;
+
+public class Node implements Serializable
+{
+	 //nombre de la variable
+	public String name;
+	public String description=null;
+
+	//posición
+	public int x;
+	public int y;
+	public int h;
+
+	//column in the table of records
+	public int column;	
+	//values that take on the discrete variable
+	public Vector values=null;//or states
+	//padres de la variable
+	public Vector parents=new Vector();
+	public Double[][] table=null;
+	public String[][] parentComb=null;
+	public Node sig=null;
+   //Tipo de Nodo. Se utiliza la enumeracion en la clase TipoNodo
+	public String tipoNodo=TipoNodo.NADA;
+	//es el indice del valor	que se encuentra seleccionado en el vector de valores posibles de variable
+	public int selectedValue=-1;
+
+	public boolean equals(Node b)
+	{
+		if(name.equals(b.name))
+			return true;
+		return false;
+	}
+
+	//estos daots son para el id3
+	public String label=null;
+	public Node[] hijos=null;
+}
+// -----------------------------------------------------------------------------

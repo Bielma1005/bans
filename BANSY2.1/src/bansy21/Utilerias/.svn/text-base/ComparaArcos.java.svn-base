@@ -1,0 +1,79 @@
+package bansy21.Utilerias;
+import java.io.*;
+import java.util.Vector;
+import bansy21.Red.*;
+public class ComparaArcos
+{
+	public static void main(String[] args) 
+	{
+		System.out.println("Hello World!");
+		ComparaArcos a=new ComparaArcos(args);
+	}
+	public ComparaArcos(String[] args)
+	{
+		if(args.length==2)
+		{
+			Vector arcos1=null,arcos2=null;
+			int estan=0,noEstan=0;
+			try
+			{
+				arcos1=leerA(args[0]);
+				arcos2=leerA(args[1]);
+			}
+			catch(Exception e){ System.out.println("No se leyeron los arcos");};
+			for (int i=0;i<arcos1.size();i++)
+			{
+				String[] temp=(String[])arcos1.elementAt(i);
+				if(member(temp,arcos2))
+				{
+					System.out.println("Arco de "+temp[0]+" a: "+temp[1]+" si esta");
+					estan++;
+				}
+				else
+				{
+					System.out.println("Arco de "+temp[0]+" a: "+temp[1]+" no esta");
+					noEstan++;
+				}				
+			}
+			System.out.println("\n");
+				System.out.println("Estan: "+estan+" arcos");
+				System.out.println("No estan: "+noEstan+" arcos");
+		}
+		else
+		{
+			System.out.println("Debe especificar los dos nombres de los archivos que contienen los arcos");
+		}
+	}
+	private boolean member(String[] arco, Vector v)
+	{
+		for (int i=0;i<v.size();i++)
+		{
+			String[] temp=((String[])v.elementAt(i));
+			if((arco[0].equals(temp[0]) && arco[1].equals(temp[1])) || (arco[1].equals(temp[0]) && arco[0].equals(temp[1])))
+				return true;
+		}
+		return false;
+	}
+	private Vector leerA(String nombre)throws IOException
+	{
+		Vector v=new Vector();
+		String lin, deli, next;		
+		deli = new String(",	 ");		
+		
+		FileInputStream inputFile = new FileInputStream(nombre);
+		BufferedReader archivo = new BufferedReader (new InputStreamReader(inputFile)); 	 		    	    
+		System.out.println("Estoy leyendo datos..");
+		
+		try
+		{		
+		 while ((lin=archivo.readLine()) != null)
+		 {
+			 v.addElement(lin.split(","));
+		 }
+		}catch (Exception e)
+		{
+			//mensaje ="Error al leer el archivo";
+		}
+		return v;
+	}
+}

@@ -1,0 +1,91 @@
+package bansy21.Gui;
+
+import javax.swing.*;
+import javax.swing.table.*;
+import javax.swing.border.*;
+import java.awt.event.*;
+import java.awt.*;
+import bansy21.Red.*;
+
+public class ArcProperties extends JDialog
+{
+	private Arco arc=null;
+	private JComboBox from=null;
+	private JComboBox to=null;
+	private JRadioButton directed=null;
+	/**
+	* Constructor
+	*/
+	public ArcProperties(JFrame parent, String name, Arco a)
+	{
+		super(parent, name, true);
+		arc=a;
+		initComponents();
+		pack();
+		Rectangle screenRect = this.getGraphicsConfiguration().getBounds();
+		this.setLocation(		screenRect.x + screenRect.width/2 - this.getSize().width/2,
+			screenRect.y + screenRect.height/2 - this.getSize().height/2);	   		
+	}
+	
+	/**
+	* Init the components
+	*/
+	private void initComponents()
+	{
+		//get the content pane for adding the components
+		JPanel content=(JPanel)this.getContentPane();
+		content.setBorder(new BevelBorder (BevelBorder.RAISED));
+		content.setLayout(new GridLayout(2,0));
+
+		//contens the nodes: from and to
+		from = new JComboBox(arc.getNodesInAVector());
+		content.add(from);
+
+		//contens the nodes: from and to
+		to = new JComboBox(arc.getNodesInAVector());
+		content.add(to);
+
+		ComboEventListener listener=new ComboEventListener();
+		from.addItemListener(listener);
+		to.addItemListener(listener);
+
+		//jRadioButton, the arco is directd or no directed
+		directed=new JRadioButton("Arco Directo");
+		content.add(directed);
+	}
+
+	public class ComboEventListener implements ItemListener
+	{
+		private boolean iWas=false;
+		public void itemStateChanged(ItemEvent e)
+		{
+			Object o = e.getSource();
+			if (o.equals(from))
+			{
+				if (iWas)
+				{
+					iWas=false;
+				}
+				else
+				{
+					to.setSelectedIndex(1 - from.getSelectedIndex());
+					iWas=true;
+				}
+			}
+			else
+			{
+				if (iWas)
+				{
+					iWas=false;
+				}
+				else
+				{
+					from.setSelectedIndex(1 - to.getSelectedIndex());
+					iWas=true;
+				}
+			}
+		}
+	}
+
+
+}

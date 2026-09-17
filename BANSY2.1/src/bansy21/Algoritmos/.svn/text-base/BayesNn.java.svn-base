@@ -1,0 +1,405 @@
+package bansy21.Algoritmos;
+
+import java.util.Vector;
+import bansy21.Utilerias.*;
+import bansy21.Red.*;
+import java.io.PrintWriter;
+
+public class BayesNn
+{
+	public Node inicio;
+	public Arco inArco;
+	public String varDepName;
+	public Node varDep=null;
+	//objeto para accesar la utilerias
+	public Utilerias util;
+	//objeto para obtener informacion mutua
+	public ProbInf pro;	
+	public int casos;
+	public double alfa,alfaG;
+	public int profundidad;
+  public 	int numVariables;
+  int pruebas=0;
+	public Red red;
+	Archivo arch=new Archivo();
+	///porcentaje de la ganacia de informacion, la define el usuario, y despues de hacer la prueba 
+	public double minPorcGan;
+	//variable para imprimer el archivo
+	PrintWriter sal=null;
+  public String baseName=null;
+	Vector vs;
+	boolean ya=false;
+
+	public BayesNn()
+	{
+		util=new Utilerias();
+		pro=new ProbInf();
+
+	}
+	
+	//******************************************************************
+//******************************************************************
+	//                   BayesN
+
+	public Red bayesN(Node in)
+	{
+ 		//sal=arch.openWriter("pruebas/"+alfaG+"_"+profundidad+"_"+minPorcGan+"_"+baseName);
+
+		ListN iList=new ListN();//lista temporal de las variables independientes
+		ListN tempList=iList;
+		createRed(in);
+		red.varDep=varDep;
+		Node temp=inicio;	
+		do
+		{
+			if(!temp.equals(varDep))
+			{
+				tempList.n=temp;
+				if(temp.sig!=null && !temp.equals(varDep))
+				{
+				  tempList.sig=new ListN();
+				  tempList=tempList.sig;
+				}
+			}
+			else//ya se habia inicializado el siguiente objeto
+			{
+				if (temp.sig==null)
+				{
+					tempList=null;
+				}
+			}
+			temp=temp.sig;			
+		}while(temp!=null);
+		inArco=new Arco();
+		util.inArco=inArco;
+		estimaK();
+/*
+		sal.println("");
+		sal.println("");
+		sal.println("**********		BayesN		**********");
+		sal.println("");
+		sal.println("");
+		sal.println("Parámetros:");
+		sal.println("	alfaG: "+alfaG);		
+		sal.println("	Número estimado de pruebas: "+pruebas);
+		sal.println("	alfa: "+alfa);		
+		sal.println("	Porcentaje de información mínima: "+minPorcGan);
+		sal.println("	Profundidad: "+profundidad);
+		sal.println("");
+		sal.println("");
+*/
+		vs=new Vector();
+		bayesN(iList);
+		red.inArco=inArco;	
+//		arch.closeWriter(sal);		
+		return red;
+	}
+	private void bayesN(ListN n)
+	{
+		//System.out.println("VarDep:  "+varDep.name);		
+		ListN ini=n;
+		ListN temp=n;
+		Arco tempArco=inArco;
+		while(tempArco.sig!=null)
+		{
+			tempArco=tempArco.sig;
+		}
+		Vector w=new Vector();	
+		Vector v=new Vector();	
+
+/*
+		sal.println("		PRIMERA ETAPA");
+		sal.println("");
+		sal.println("Variable Dependiente:  "+varDep.name);
+		sal.println("");
+*/
+		do
+		{
+			if(temp.n!=null && !varDep.name.equals(temp.n.name))
+			{
+				//System.out.println(temp.n.values.size()+" "+temp.n.name);				
+				double I=pro.miF(temp.n);
+				temp.I=I;				
+				//porcentaje de ganacia de informacion
+				double porcInf=(I/pro.infVarDep)*(-100);				
+				double T=2*(casos)*I;
+				int df=(varDep.values.size()-1)*(temp.n.values.size()-1);
+				double chiAlfa=util.chi(alfa,df);
+				double chiT=util.pochisq(T,df);
+				temp.chiT=chiT;
+				v.addElement(temp);
+				if (!ya)
+				{
+					vs.addElement(temp);
+				}
+/*
+				sal.println("Variable explicativa: "+temp.n.name);
+				sal.println("Información mutua: "+I);
+				sal.println("Porcentaje de información mutua "+porcInf);
+				sal.println("T = "+T);
+				sal.println("Grados de libertad: "+df);
+				sal.println("Chi de alfa: "+chiAlfa);
+				sal.println("Probabilidad de T: "+chiT);
+*/
+				//la hipotesis nula es que las variables son independientes
+				//si T es menor que chiAlfa, entonces no se rechaza la hipo
+				//si no se cumple, entoces se dibuja un arco, hipotesis alterna, no independientes
+				//la segunda condicion que se debe cumplir es que el porcentanje de ganancia de 
+				//informacion sea mayor que el minimo porcentaje especificado por el usuario
+				if(!(T<chiAlfa) && porcInf>=minPorcGan)
+				{
+					w.addElement(temp);
+/*
+					sal.println("");
+					sal.println("	Agregar arco de "+temp.n.name+" a "+varDep.name);
+*/
+				}
+	//			sal.println("");
+			}
+			temp=temp.sig;
+		}while(temp!=null);
+/*
+		sal.println("");
+		sal.println("");
+*/
+		//ordenar la lista de acuerdo a la informacion proporcionada
+		if (!ya)
+		{
+			vs=util.sort(vs);
+		}
+		ya=true;
+		w=util.sort(w);
+		v=util.sort(v);
+		ListN mayorInf=util.getMayor(v);
+/*
+		sal.println("		SEGUNDA ETAPA ");
+		sal.println("");
+		sal.println("Variable más informativa: "+mayorInf.name);
+		sal.println("");
+*/
+		if(w.size()>(1))
+		{
+//			System.out.println(" "+mayorInf.name+"   "+((ListN)w.firstElement()).n.name);			
+		
+			for(int k=1;k<=profundidad;k++)
+			{
+				//Condicionar con la primera variable de la lista w, para ver si se eliminan arcos
+				Node[] conCond;
+				if(k<=w.size())
+					conCond=new Node[k];
+				else
+					conCond=new Node[w.size()];
+
+				int dfCon=1;
+				//los grados de libertadf del conjunto condicionante se calculan como el producto de los valores
+				//posibles de cada variable
+
+				//formar el conjunto condicionante. lo encabeza la variable que proporciono mayor informacion. cuando la pro
+				//fundidad es mayor a 1, entonces las informaciones que el resto de las variables proporciona debio
+				//actualizarse. De estas variables que quedad tomar las que porporciuonan mayor informacion(esta informacion
+				//esla informacion mutua condicional dado el grupo condicionante anterior)
+	//			sal.println("Conjunto condicionante");
+				w=util.reOrder(w);
+				v=util.reOrder(v);
+				for(int j=0;j<k;j++)
+				{					
+					if(j<w.size())
+					{
+						conCond[j]=((ListN)w.elementAt(j)).n;//conjunto condicionante
+					  System.out.println("	        VariableCond: "+conCond[j].name);
+						dfCon=dfCon*(conCond[j].values.size());
+					}
+				}
+	//			sal.println("");
+				for(int i=k;i<v.size();i++)
+				{
+					//System.out.println(""+varDep.name+" k"+k+" w size"+w.size());
+					//System.out.println(""+i+" w.size() :"+w.size()+" k= "+k);
+					double I=pro.mcIF(((ListN)v.elementAt(i)).n, conCond);
+					
+					//actualizar la informacion que proporcina la variable
+					double porcInf=(I/pro.infVarDep)*(-100);
+					//System.out.println(""+porcInf);
+					((ListN)v.elementAt(i)).I=I;
+					double T=2*(casos)*I;
+					int df=(varDep.values.size()-1)*(((ListN)v.elementAt(i)).n.values.size()-1)*dfCon;
+					double chiAlfa=util.chi(alfa,df);
+					double chiT=util.pochisq(T,df);
+/*
+					sal.println("Variable explicativa: "+((ListN)w.elementAt(i)).n.name);
+					sal.println("Información mutua: "+I);
+					sal.println("Porcentaje de información mutua "+porcInf);
+					sal.println("T = "+T);
+					sal.println("Grados de libertad: "+df);
+					sal.println("Chi de alfa: "+chiAlfa);
+					sal.println("Probabilidad de T: "+chiT);
+*/
+					if(T<chiAlfa || porcInf<minPorcGan)
+					{
+						//remover el arco de la lista de arcos	
+						//	System.out.println("quitar de "+((ListN)w.elementAt(i)).n.name+"  a  "+varDep.name);
+/*
+						sal.println("");
+						sal.println("	Quitar Arco de: "+((ListN)w.elementAt(i)).n.name+" a "+varDep.name);
+						sal.println("");
+*/
+						//w.removeElementAt(i);
+						//i--;//porque al remover un elemento, los demas se recorren, de disminuir i, entonces
+						
+						w.remove((ListN)v.elementAt(i));
+				//		System.out.println("	Quitar Arco de: "+((ListN)v.elementAt(i)).n.name+" a "+varDep.name);
+						//ya no se revisaria la variable que quedo en el lugar de la que se quito						
+					}
+					else
+					{
+						if(!w.contains((ListN)v.elementAt(i)))
+						{
+							w.addElement((ListN)v.elementAt(i));
+						//	System.out.println("agregar de "+((ListN)v.elementAt(i)).n.name+"  a  "+varDep.name);
+						//	System.out.println("T "+T+" chiAlfa"+chiAlfa+" porcInf "+porcInf);
+						}
+					}
+				}
+				if(k==w.size())//ya no hay variables para aumentar la profundidad
+					break;
+			}
+		}
+		if (w.size()==0)
+		{
+			w.addElement(mayorInf);
+		}
+		inArco=util.agregaArcos(w, inArco,varDep);
+		varDep=((ListN)vs.elementAt(0)).n;
+		vs.removeElementAt(0);
+		//varDep=mayorInf.n;
+		pro.varDep=varDep;
+		ListN temp2=util.remove(ini, varDep.name);
+//		sal.println("");
+		if(temp2.sig != null)
+			bayesN(temp2);
+	}
+
+//******************************************************************
+//estima el valor "maximo" de pruebas que puede haber en el algoritmo
+	public void estimaK()
+	{
+		int k_=0;
+		int n_=numVariables;//este numero de variables incluye a la variable  dependiente, por lo
+		//que en el primer siclo se debe comenzar desde uno
+		for (int i=1;i<n_;i++)
+		{
+			for (int j=0;j<=profundidad;j++)
+			{
+				if ((n_-i)>j)
+				{
+					k_ = k_ + ((n_-i)-j);
+				}
+			else
+			{//break;
+			}
+		}
+	}
+	double k=(new Double(k_)).doubleValue();
+	System.out.println("K: "+k);
+	pruebas=k_;
+	alfa=1-Math.pow((1-alfaG),(1.0/k));	
+}
+
+private void createRed(Node in)
+	{
+		red = new Red(); 
+		Node temp=in;
+		Node temp2=null; 
+		do
+		{
+			if(red.inicio==null)
+			{
+				red.inicio=new Node();
+				red.inicio.name=temp.name;
+				red.inicio.x=temp.x;
+				red.inicio.y=temp.y;
+				red.inicio.column=temp.column;
+				red.inicio.values=temp.values;
+				temp2=red.inicio;
+			}
+			else
+			{
+				Node temp3=new Node();
+				temp3.name=temp.name;
+				temp3.x=temp.x;
+				temp3.y=temp.y;
+				temp3.column=temp.column;
+				temp3.values=temp.values;
+				temp2.sig=temp3;
+				temp2=temp2.sig;
+			}
+			if(temp2.name.equals(varDepName))
+			{
+				System.out.println("la varDep "+temp2.name);
+				varDep=temp2;
+			}
+			temp=temp.sig;
+		}while(temp!=null);
+		inicio=red.inicio;
+	}
+
+}
+
+
+/*
+
+Codigo inutilizado
+
+
+
+			for(int i=1;i<w.size();i++)
+			{
+				for(int k=1;k<profundidad;k++)
+				{
+					Node[] conCond=new Node[k];
+				  int dfCon=1;
+					for(int j=0;j<k;j++)
+					{
+						if(j==i)//no meter la variable con la que queremos ver si esta d-separada la variable dependiente
+							j++;
+						if(j<w.size())
+						{
+							conCond[j]=((ListN)w.elementAt(j)).n;//conjunto condicionante
+							dfCon=dfCon*(conCond[j].values.size());
+						}
+					}
+					double I=pro.mcI(((ListN)w.elementAt(i)).n, conCond);
+					double T=2*(casos)*I;
+					int df=(varDep.values.size()-1)*(((ListN)w.elementAt(i)).n.values.size()-1)*dfCon;
+					double chiAlfa=util.chi(alfa,df);
+					if(!(T>=chiAlfa))
+					{
+						util.remove(((ListN)w.elementAt(i)).n,varDep);
+						break;
+						//						System.out.println("quitar arco de: "+((ListN)w.elementAt(i)).n.name+" a: "+varDep.name);
+					}
+				}
+			}
+
+
+			agregaba un arco cuando la prueba de hipotesis no se cumplia
+								//probar que se obtenga almenos el minimo de ganacia de informacion especificada
+					
+						//System.out.println("Porcentaje de ganancia  informacion: "+porcInf+"   "+minPorcGan);
+						if(tempArco.from!=null)
+						{
+							tempArco.sig=new Arco();
+							tempArco=tempArco.sig;
+							tempArco.from=temp.n;
+							tempArco.to=varDep;
+//							System.out.println("arco from: "+temp.n.name+" to: "+varDep.name);
+						}
+						else
+						{
+							tempArco.from=temp.n;
+							tempArco.to=varDep;
+//							System.out.println("arco from: "+temp.n.name+" to: "+varDep.name);
+						}
+					
+						//System.out.println("arco from: "+temp.n.name+" to: "+varDep.name);
+			*/

@@ -1,0 +1,278 @@
+package bansy21.Metricas;
+
+import java.util.Vector;
+import java.util.Arrays;
+import bansy21.Red.*;
+import bansy21.Utilerias.*;
+import bansy21.Gui.Algorithm;
+
+/*
+*  Clase que obtiene la medida MDL para un red dada
+*/
+public class MDL_Nilson  extends Algorithm
+{
+	public Red red=null;	
+	//nodo inicio de la lista auxiliar
+	private NodeH inNH=null;
+	public Vector casos;
+	private Vector casesCounter;
+	
+	/*
+	* Constructor
+	*/
+	public MDL_Nilson()
+	{
+		super();
+	}
+	public void run()
+	{
+		println("MDL: "+getMDL());
+	}
+	/**
+	*Calcula MDL para la red dada
+	*donde red es la red y casos es la base de datos
+	*
+	*1) encontar las combinaciones que ocurren en la base de datos, contabilizando
+	*cuantas veces ocurre cada una
+	*2) calcular la probabilidad del registro de las tablas de probabilidades de la red, para pultiplicarla
+	* por el numero de veces que ocurre cada combinación
+	*sumar cada uno de estos valores, para obtener el fitnes de la red, con penanilavión
+	*3)calcular la penanlización
+	*/
+	public double getMDL()
+	{		
+		pro.casos=casos;
+		red.inicio=pro.fillParents(red.inicio,red.inArco);
+		//inicializar la lista auxiliar de nodos
+		initNodeListHelper();
+		casesCounter=new Vector();
+		double N=(double)casos.size();	
+		//para cada uno de los casos		
+	
+		//contabilizar los registros
+		for (int c=0;c<N;c++)//de esta forma solo se recorre la base de datos una sola ves
+		{
+			Registro r = new Registro();
+			r.cas=(String[])casos.elementAt(c);
+			counter(r);
+		}
+		//hasta aqui ya se han hecho todas las sumas, solo falta realizar el producto
+		return calculaMDL();
+	}
+	private double calculaMDL()
+	{	
+		println(""+casesCounter.size());
+		int size=casesCounter.size();
+		double mdl=0;
+		double K=0;
+		boolean Kya=false;
+		for (int c=0;c<size;c++)
+		{
+			Registro r=(Registro)casesCounter.elementAt(c);
+			Node temp=red.inicio;
+			double pro=1;
+			do
+			{
+				if(!Kya)
+					K+=getKi(temp);
+				//valor que tomó la variable
+				String value=(String)r.cas[temp.column];
+				//si tiene padres, encontrar la combinacion de los mismos, para obtener la probabilidad
+				//de las tablas de probabilidades condicionales
+				if (temp.parents.size()>0)
+				{
+					Node[] nodos=new Node[temp.parents.size()];
+					temp.parents.copyInto(nodos);
+					//obtener los valores tomados por los padres
+					String[] comParents = new String[temp.parents.size()];
+					for (int i=0;i<comParents.length;i++)
+					{
+						comParents[i]=(String)r.cas[((Node)temp.parents.elementAt(i)).column];
+					}
+					int con=getPositionParentsComb(comParents,nodos);
+					int k=getPositionVariable(value,temp);
+					if((con-1)>=0 && k>=0)
+					{
+						println("pro "+pro);
+						pro*=temp.table[con-1][k].doubleValue();
+					}
+					else
+						println("   -1");
+				}
+				else
+				{
+					println("   pro "+pro);
+					int k=getPositionVariable(value,temp);
+					pro*=temp.table[0][k].doubleValue();
+				}
+				temp=temp.sig;
+			}
+			while (temp!=null);
+			if(!Kya)
+				Kya=true;
+			if(pro>0)
+			{
+				println("      mdl "+mdl);
+				mdl+=r.cont*(-Math.log(pro));
+			}
+		}
+		println("MDL  "+mdl+"   K"+K);
+		return mdl+(K*0.5*Math.log(size));
+	}
+	private int getPositionVariable(String value, Node variable)
+	{
+		int size=variable.values.size();
+		for (int i=0;i<size;i++)
+		{
+			if (value.equals(variable.values.elementAt(i)));
+			{
+				return i;
+			}
+		}
+		return -1;
+	}
+	private int getPositionParentsComb(Object[] comb, Node[] nodos)
+	{
+		//para cada combinación de los padre		
+  	//Maquina de combinaciones
+		int[] contador=new int[nodos.length];//en el se pondran los valores que van hasta el momento de cada variable			
+		for(int i=0;i<contador.length;i++)
+			contador[i]=0;			
+		int con=0;
+		while(contador[0]<nodos[0].values.size())
+		{			
+			//En el registro actual, solo se prodra cumplir una combinación actual de los padres
+			//por lo que si esta es encuontrada, entonces hay que terminar de generar combinaciones
+			boolean founded = false;
+			Object[] values=new Object[nodos.length];
+			for(int i=(nodos.length-1);i>=0;i--)
+			{
+				if(contador[i]<nodos[i].values.size())
+				{
+					values[i]=nodos[i].values.elementAt(contador[i]);
+					if(i==(nodos.length-1))
+						contador[i]++;
+				}
+				else
+				{
+					if(i!=0)
+					{
+						contador[i]=0;
+						values[i]=nodos[i].values.elementAt(contador[i]);
+						if(i==(nodos.length-1))
+							contador[i]++;
+						contador[i-1]++;
+					}
+				}
+			}			
+			if(values[0]!=null)//aqui ya se tiene la siguiente combinación
+			{		
+				boolean ya=true;
+				for (int i=0;i<nodos.length;i++)
+				{
+					if (!comb[i].equals(values[i]))
+					{
+						ya=false;
+						break;
+					}
+				}
+				con++;//lleva la cuenta de los factores
+				if(ya)
+					return con;
+			}
+		}
+		return -1;
+	}
+	private double getKi(Node temp)
+	{
+		double qi=(double)pro.getParentsComb(temp);
+		return qi*((double)temp.values.size()-1);
+	}
+	/**
+	*calcula la suma de los Nijk
+	*/
+	private double getNij(double[] Nijk)
+	{
+		double sum=0;
+		for (int i=0;i<Nijk.length;i++)
+		{
+			sum+=Nijk[i];
+		}
+		return sum;
+	}
+	
+	private double getProducto(double[] v)
+	{
+		double producto = 1;		
+		for (int i=0;i<v.length;i++)
+		{
+			producto=producto*v[i];
+		}
+		return producto;
+	}
+
+	/*
+	* Inicializa la lista auxiliar a con la misma estructura que la lista original de nodos
+	*/
+	private void initNodeListHelper()
+	{
+		//crear un nodo temporal para recorrer la lista  nodos
+		Node temp=red.inicio;
+		//crear el nodo inici  de la lista temporal, con el nodo inicio de la lista original
+		inNH=new NodeH(temp);
+		NodeH tempNH= inNH;
+
+		while (temp.sig!=null)
+		{
+			//ya que hay un nodo siguiente, crear un nuevo nodo auxiliar a la lista auxiliar
+			tempNH.sig=new NodeH(temp.sig);
+			tempNH=tempNH.sig;
+			temp=temp.sig;
+		}
+	}
+	private void counter(Registro r)
+	{
+		boolean found=false;
+		int size=casesCounter.size();
+		for (int i=0;i<size;i++)
+		{
+			if(((Registro)casesCounter.elementAt(i)).equals(r))
+			{
+				((Registro)casesCounter.elementAt(i)).cont++;
+				found=true;				
+			}
+		}
+		if(!found)
+			casesCounter.addElement(r);
+	}
+}
+class Registro
+{
+	public Object[] cas=null;
+	public int cont=1;
+	public Registro()
+	{
+
+	}
+	/**
+	*
+	*/
+	public boolean equals(Registro r)
+	{
+		if(r!=null && cas!=null)
+		{
+			boolean reg=true;
+			for (int i=0;i<cas.length;i++)
+			{
+				if(!cas[i].equals(r.cas[i]))
+				{
+					reg=false;
+					break;
+				}
+			}
+			return reg;
+		}
+		else
+			return false;
+	}
+}

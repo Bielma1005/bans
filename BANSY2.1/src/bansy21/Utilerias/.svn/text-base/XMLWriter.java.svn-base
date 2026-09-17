@@ -1,0 +1,42 @@
+package bansy21.Utilerias;
+
+import javax.xml.parsers.*;
+import java.io.*;
+import org.xml.sax.SAXException;
+import org.w3c.dom.*;
+import bansy21.Red.*;
+import java.util.Vector;
+
+public class XMLWriter 
+{
+	public static void main(String[] args) 
+	{
+		System.out.println("Hello World!");
+		XMLWriter w=new XMLWriter();
+	}
+	public XMLWriter()
+	{
+		 createDoc();
+	}
+	private void createDoc()
+	{
+		DocumentBuilder builder=null;		
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		try
+		{
+			builder=factory.newDocumentBuilder();
+		}
+		catch(Exception e){}
+		Document doc=builder.newDocument();
+		Element e = doc.createElement("ANALYSISNOTEBOOK");
+		//Node d = doc.createNode("Node");
+		e.setAttribute("NAME","nombre de la red");
+		e.setAttribute("ROOT","");
+		System.out.println(e.toString());
+	}
+	private void getBNModel()
+	{
+
+	}
+
+}

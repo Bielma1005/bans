@@ -1,0 +1,61 @@
+package bansy21.Gui;
+
+import java.awt.*;
+import java.awt.event.*;
+import java.util.Vector;
+import java.util.Calendar;
+import javax.swing.*;
+import javax.swing.event.InternalFrameListener;
+import javax.swing.event.InternalFrameEvent;
+
+
+public class Splash
+{
+	public static void main(String[] args) 
+	{
+		System.out.println("Hello World!");
+	}
+
+	JLabel splashLabel=null;
+	JWindow splashScreen=null;
+	JFrame frame=new JFrame();
+
+	public Splash(ImageIcon icon)
+	{		
+		createSplashScreen(icon);
+		splashScreen.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+		show();
+	}
+	 /**
+     * Show the spash screen while the rest of the demo loads
+     */
+    public void createSplashScreen(ImageIcon icon) 
+    {
+			splashLabel = new JLabel(icon);	
+			splashScreen = new JWindow(frame);
+			JPanel p=(JPanel)splashScreen.getContentPane();
+			p.add(splashLabel,BorderLayout.CENTER);		
+
+			splashScreen.pack();
+			Rectangle screenRect = frame.getGraphicsConfiguration().getBounds();
+			splashScreen.setLocation(
+			screenRect.x + screenRect.width/2 - splashScreen.getSize().width/2,
+			screenRect.y + screenRect.height/2 - splashScreen.getSize().height/2);	   
+    }
+    
+    public void show() 
+    {			
+			splashScreen.show();	    
+    }
+    
+    /**
+     * pop down the spash screen
+     */
+    public void hide() 
+    {
+			splashScreen.setVisible(false);
+			splashScreen = null;
+			splashLabel = null;
+    }
+
+}

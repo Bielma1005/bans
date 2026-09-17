@@ -1,0 +1,92 @@
+package bansy21.Red;
+
+import java.io.Serializable;
+import java.util.Vector;
+
+public class Red implements Serializable
+{	
+	public boolean modificada=true;
+	public String name="No name";
+	public String comment=null;
+	public Node inicio;
+	public Arco inArco;
+	public Node varDep;
+	public int numVariables=-1;
+	public Node[] nodes=null;
+	public String[] vNames=null;
+
+	public Red()
+	{
+	}
+
+	public Red(String na)
+	{
+		name=na;
+                
+	}
+
+	/**
+	*Devuelve el conjunto de variables en un arreglo
+	*/
+	public Node[] getArray()
+	{
+		if (nodes==null)
+		{		
+			Vector v=new Vector();
+			Vector vn=new Vector();
+			Node temp=inicio;
+			while (temp!=null)
+			{
+				v.addElement(temp);
+				vn.addElement(temp.name);
+				temp=temp.sig;
+			}
+			nodes=new Node[v.size()];
+			vNames=new String[vn.size()];
+			v.copyInto(nodes);			
+			vn.copyInto(vNames);
+		}
+		return nodes;
+	}
+
+	public String[] getVariablesNames()
+	{
+		if (vNames==null)
+		{		
+			Vector v=new Vector();
+			Vector vn=new Vector();
+			Node temp=inicio;
+			while (temp!=null)
+			{
+				v.addElement(temp);
+				vn.addElement(temp.name);
+				temp=temp.sig;
+			}
+			nodes=new Node[v.size()];
+			vNames=new String[vn.size()];
+			v.copyInto(nodes);			
+			vn.copyInto(vNames);
+		}
+		return vNames;
+	}
+
+
+	/**
+	*Devuelve el numero de varibales de la red
+	*/
+	public int getNumVariables()
+	{
+		if (numVariables==(-1))
+		{			
+			Node temp=inicio;
+			numVariables=0;
+			while (temp!=null)
+			{
+				numVariables++;
+				temp=temp.sig;
+			}			
+		}
+		return numVariables;
+	}
+
+}

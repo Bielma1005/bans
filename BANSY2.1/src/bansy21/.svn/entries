@@ -1,0 +1,117 @@
+9
+
+dir
+15
+https://www.dynamics.unam.edu/svn/sources/java/BANSY2.1/src/bansy21
+https://www.dynamics.unam.edu/svn
+
+
+
+2009-01-19T17:02:57.855934Z
+1
+jjimenez
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+d6104ca7-7faf-4609-8995-9b59afcc05bd
+
+Algoritmos
+dir
+
+Utilerias
+dir
+
+Inferencia
+dir
+
+Gui
+dir
+
+frmPrincipal.java
+file
+
+
+
+
+2009-01-19T17:36:33.640625Z
+9277696f0bd60507cb7cbe93e17abe6e
+2009-01-19T17:02:57.855934Z
+1
+jjimenez
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+89485
+
+Clasificacion
+dir
+
+Metricas
+dir
+
+frmPrincipal.form
+file
+
+
+
+
+2009-01-19T17:36:33.656250Z
+4538520903dc48777f01115a64fc4f1c
+2009-01-19T17:02:57.855934Z
+1
+jjimenez
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+27522
+
+Red
+dir
+

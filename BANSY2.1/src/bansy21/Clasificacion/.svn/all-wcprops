@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/!svn/ver/1/sources/java/BANSY2.1/src/bansy21/Clasificacion
+END
+CrossValidation.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/!svn/ver/1/sources/java/BANSY2.1/src/bansy21/Clasificacion/CrossValidation.java
+END
+ClasificacionGeneral.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/!svn/ver/1/sources/java/BANSY2.1/src/bansy21/Clasificacion/ClasificacionGeneral.java
+END
+Clasificacion.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/!svn/ver/1/sources/java/BANSY2.1/src/bansy21/Clasificacion/Clasificacion.java
+END
+ClasificacionNaive.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/!svn/ver/1/sources/java/BANSY2.1/src/bansy21/Clasificacion/ClasificacionNaive.java
+END
+HoldOut.java
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/!svn/ver/1/sources/java/BANSY2.1/src/bansy21/Clasificacion/HoldOut.java
+END
