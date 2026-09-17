@@ -1,0 +1,74 @@
+{\rtf1\ansi\deff0
+{\fonttbl{\f0 Arial;}{\f1 Courier New;}}
+\paperw11907\paperh16840\margl1440\margr1440\margt1200\margb1200
+\fs28\b Informe de cambios y correcciones - BANSY 2.1\b0\fs22\par
+\par
+\b Fecha:\b0 17 de septiembre de 2026\par
+\b Proyecto:\b0 BANSY 2.1 - Redes bayesianas\par
+\par
+\b 1. Objetivo\b0\par
+Se corrigieron errores que impedian cargar algunas bases de datos, ejecutar Bayes 9, abrir tablas de probabilidades, utilizar Inferencia Naive y visualizar correctamente las ventanas del programa.\par
+\par
+\b 2. Problemas encontrados\b0\par
+\bullet\tab Las bases UNAM no usaban todas el mismo separador: unas utilizaban comas y otras tabuladores.\par
+\bullet\tab Una fila de Base UNAM 2006-2.txt contenia dos registros unidos y tenia 55 columnas en lugar de 28.\par
+\bullet\tab Bayes 9 podia generar correctamente la red, pero devolver el codigo de salida 44. El programa interpretaba ese codigo como un fallo y descartaba la red.\par
+\bullet\tab Bayes 9 dependia de la carpeta actual para encontrar la base de datos y final_graph1.lsp.\par
+\bullet\tab El lector de arcos podia quedar en un bucle al no encontrar alguno de los nodos.\par
+\bullet\tab La ventana de parametros mostraba solamente el boton Cancelar debido a un problema de distribucion de componentes.\par
+\bullet\tab Varias ventanas tenian tamanos fijos y cortaban el texto o los controles.\par
+\bullet\tab Inferencia Naive solo imprimia el resultado en la consola y no lo mostraba en una ventana.\par
+\bullet\tab La tabla general de probabilidades podia intentar usar una red nula.\par
+\par
+\b 3. Cambios realizados\b0\par
+\b 3.1 Lectura de bases de datos\b0\par
+Archivo.java ahora detecta automaticamente si la cabecera usa comas o tabuladores. Cada fila se valida contra el numero de columnas esperado y se eliminan espacios innecesarios. Las filas invalidas no bloquean toda la carga: se cuentan y se muestra un aviso al usuario.\par
+\par
+\b 3.2 Correcciones de Bayes 9\b0\par
+Bayes9.java ahora utiliza la ruta absoluta de la base seleccionada y ejecuta el proceso en la carpeta correcta. Se elimina la salida anterior antes de iniciar y se lee la salida generada en final_graph1.lsp.\par
+\par
+El proceso tiene un limite de 120 segundos para evitar que la interfaz quede bloqueada. Si el ejecutable devuelve un codigo distinto de cero pero genera una red valida, la red se acepta. Los mensajes se escribieron sin caracteres que pudieran aparecer como vA?lida por problemas de codificacion.\par
+\par
+Archivo2.java ahora lee los arcos usando las flechas -- y ->, ignora lineas vacias o invalidas y solo crea arcos cuyos nodos existan. Tambien se corrigio el posible bucle infinito del lector.\par
+\par
+\b 3.3 Ventanas y visualizacion\b0\par
+Las ventanas de progreso, salida, red, parametros, propiedades de nodo y tablas utilizan pack() y tamanos minimos razonables. Las areas de texto tienen ajuste automatico de linea para evitar que los mensajes queden cortados.\par
+\par
+El dialogo de parametros de aprendizaje ahora utiliza una distribucion explicita para mostrar correctamente etiquetas, campos de texto y botones.\par
+\par
+\b 3.4 Probabilidades e inferencia\b0\par
+La tabla general de probabilidades ya no recibe una red nula. Inferencia Naive ahora muestra el resultado en una ventana titulada Inferencia Naive y avisa cuando no se ha seleccionado una variable dependiente.\par
+\par
+\b 4. Archivos principales modificados\b0\par
+\f1 src/bansy21/Algoritmos/Bayes9.java\par
+src/bansy21/Utilerias/Archivo.java\par
+src/bansy21/Utilerias/Archivo2.java\par
+src/bansy21/Utilerias/XMLParser.java\par
+src/bansy21/Gui/DiaParametros.java\par
+src/bansy21/Gui/OutPut.java\par
+src/bansy21/Gui/ShowerTable.java\par
+src/bansy21/Gui/RedFrame.java\par
+src/bansy21/Gui/Progress.java\par
+src/bansy21/Gui/NodeProperties.java\par
+src/bansy21/frmPrincipal.java\par
+\f0\par
+\b 5. Pruebas realizadas\b0\par
+\bullet\tab Compilacion final con javac: correcta, sin errores de compilacion.\par
+\bullet\tab Asia.txt: 8 columnas y 1000 registros validos.\par
+\bullet\tab Base UNAM 2006-2.txt: 28 columnas y 143508 registros validos; se omitio 1 registro corrupto.\par
+\bullet\tab Base UNAM 2006-3.txt: 28 columnas y 76150 registros validos.\par
+\bullet\tab Bayes 9 genero correctamente el archivo de arcos y produjo una red valida aunque el ejecutable devolvio codigo 44.\par
+\bullet\tab Se comprobo que no quedaran procesos Bayes9 activos despues de las pruebas.\par
+\par
+\b 6. Como ejecutar el programa\b0\par
+Abrir PowerShell en la carpeta BANSY2.1 y ejecutar:\par
+\f1 java -cp "build\\classes;dist\\BANSY2.1.jar" bansy21.frmPrincipal\f0\par
+\par
+Despues seleccionar Archivo > Cargar Datos y elegir una base. Para Bayes 9, seleccionar Aprendizaje > Bayes 9.\par
+\par
+\b 7. Observacion tecnica\b0\par
+Las bases UNAM son grandes y los algoritmos de aprendizaje pueden tardar mas que Asia.txt. Ahora el programa muestra el progreso y Bayes 9 tiene un limite de 120 segundos para evitar un bloqueo indefinido.\par
+\par
+\b Conclusion\b0\par
+El programa compila correctamente y las rutas principales de carga de datos, aprendizaje Bayes 9, tablas de probabilidades, ventanas e Inferencia Naive fueron corregidas y verificadas.\par
+}
