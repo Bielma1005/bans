@@ -1,10 +1,6 @@
 package bansy21.Gui;
 
-import java.awt.*;
-import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.event.InternalFrameListener;
-import javax.swing.event.InternalFrameEvent;
 
 public class OutPut extends JDialog
 {
@@ -40,13 +36,16 @@ public class OutPut extends JDialog
 	public OutPut(JFrame p,String title)
 	{
 		super(p,title,false);
-		outPut=new JTextArea();
+		outPut=new JTextArea(18, 70);
 		outPut.setAutoscrolls(true);
+		outPut.setLineWrap(true);
+		outPut.setWrapStyleWord(true);
 		//outPut.setEditable(false);
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		setSize(100,100);
 		JScrollPane pane=new JScrollPane(outPut);
 		setContentPane(pane);	
+		pack();
+		setSize(Math.max(getWidth(), 550), Math.max(getHeight(), 350));
 	}
 	public void append(String s)
 	{

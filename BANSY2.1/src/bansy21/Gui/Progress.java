@@ -35,7 +35,6 @@ public class Progress extends JInternalFrame implements Runnable
               true);//iconifiable
 
 		setLocation(50, 50);
-		setSize(300,300);
 		setBackground(Color.white);
             setVisible( true);
 		setTitle( "Reporte: " + title);
@@ -74,8 +73,10 @@ public class Progress extends JInternalFrame implements Runnable
 		JPanel content=(JPanel)getContentPane();
 
 		//labelImage=new JLabel(image);
-		outPut=new JTextArea();
-		outPut.setAutoscrolls(true);		
+		outPut=new JTextArea(18, 60);
+		outPut.setAutoscrolls(true);
+		outPut.setLineWrap(true);
+		outPut.setWrapStyleWord(true);
 		JScrollPane pane=new JScrollPane(outPut);
 
       	content.add(BtnGuardarComo, BorderLayout.NORTH);
@@ -84,8 +85,8 @@ public class Progress extends JInternalFrame implements Runnable
 		content.add(pane,BorderLayout.CENTER);
 		content.add(progressBar,BorderLayout.SOUTH);
 		
-		//this.pack();
-		setSize(150,300);
+		pack();
+		setSize(Math.max(getWidth(), 500), Math.max(getHeight(), 300));
 	}
 // ------------------------------------------------------------------------
 	private void BtnGuardarComoActionPerformed(java.awt.event.ActionEvent evt) 

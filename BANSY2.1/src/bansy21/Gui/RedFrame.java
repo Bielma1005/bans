@@ -41,7 +41,7 @@ public class RedFrame extends JInternalFrame
       true, //maximizable
       true);//iconifiable
     setLocation(xOffset, yOffset);
-    setSize(450,450);
+    setPreferredSize(new Dimension(450,450));
     setBackground(Color.white);
 
     hta = LH;
@@ -87,6 +87,7 @@ public class RedFrame extends JInternalFrame
       Panel_Btns.add( Btn_Reporte1 );
       Panel_Btns.add( Btn_Reporte2 );
       getContentPane().add( Panel_Btns, BorderLayout.NORTH );
+      pack();
   }
 // -------------------------------------------------------------------------------------
 //Segundo Constructor
@@ -98,7 +99,7 @@ public class RedFrame extends JInternalFrame
       true, //maximizable
       true);//iconifiable
     setLocation(xOffset, yOffset);
-    setSize(450,450);
+    setPreferredSize(new Dimension(450,450));
     setBackground(Color.white);
 
     hta = LH;

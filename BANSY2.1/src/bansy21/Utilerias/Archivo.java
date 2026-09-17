@@ -10,6 +10,7 @@ public class Archivo
 	public Vector casos;
 	public Node varDep;
 	public int numVariables;
+	public int registrosInvalidos;
 // -----------------------------------------------------------------------------
 	public void leeE(String directory,String file)throws IOException
 	{
@@ -85,19 +86,23 @@ public class Archivo
 		Node temp=inicio;
 		String lin, deli, next;
 		casos=new Vector();
+		registrosInvalidos=0;
 		deli = new String(",	 ");		
 		FileInputStream inputFile = new FileInputStream(nombre);
 		BufferedReader archivo = new BufferedReader (new InputStreamReader(inputFile)); 	 		    	    
 		System.out.println("Estoy leyendo datos..");
 		lin=archivo.readLine();
-		StringTokenizer st= new StringTokenizer(lin, deli, false);
+		if (lin==null || lin.trim().length()==0)
+			throw new IOException("El archivo no contiene una cabecera de variables.");
+		String separator=lin.indexOf('\t')>=0 ? "\\t" : ",";
+		String[] headers=lin.split(separator,-1);
 
 		int column=0;
-		while ( st.hasMoreTokens() )
+		while (column<headers.length)
 		{ 
-			temp.name=st.nextToken();
+			temp.name=headers[column].trim();
 			temp.column=column;
-			if( st.hasMoreTokens() )
+			if(column<headers.length-1)
 			{
 				temp.sig=new Node();
 				temp=temp.sig;
@@ -114,10 +119,20 @@ public class Archivo
                   
 		  while (  ( lin=archivo.readLine() ) != null  )
 		  { 
-                      reg=lin.split(",");
+			  if (lin.trim().length()==0)
+				  continue;
+					  reg=lin.split(separator,-1);
+					  if (reg.length!=numVariables)
+					  {
+						  registrosInvalidos++;
+						  continue;
+					  }
+					  for (int i=0;i<reg.length;i++)
+						  reg[i]=reg[i].trim();
                       con++;
                       casos.addElement(reg);
 		  }
+		  archivo.close();
 		} catch (java.lang.OutOfMemoryError e) 
                 {
 //                    //Out of memory
@@ -300,7 +315,7 @@ public class Archivo
 		 Node temp=red.inicio;
 		 red.inArco=new Arco();
 		 Arco tempA=red.inArco;
-		 //funcionará como una pila
+		 //funcionarï¿½ como una pila
 		 Vector llaves=new Vector();
 
 		String lin, deli, next;
@@ -349,7 +364,7 @@ public class Archivo
 						 }
 					}
 					
-					//hay que ver si en el paso anterior no se lee por error un nodo, si es asi hay que poner algo que recupere esa información
+					//hay que ver si en el paso anterior no se lee por error un nodo, si es asi hay que poner algo que recupere esa informaciï¿½n
 					//empezar a leer los nodos
 									
 				}

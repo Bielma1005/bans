@@ -10,6 +10,7 @@ import java.util.Vector;
 public class XMLParser
 {	
 	Red red;
+	private String errorMessage;
 	public static void main(String[] args) 
 	{
 		System.out.println("Hello World!");
@@ -24,8 +25,11 @@ public class XMLParser
 	*/
 	public Red getRedFromXMLFile(String fileName)
 	{
+		errorMessage=null;
 		red=new Red();
 		Document document=getDocument(fileName);
+		if(document==null)
+			return null;
 		if(document!=null)
 		{
 			//obtener el elemento del documento, que en realidad es todo el documento
@@ -62,14 +66,16 @@ public class XMLParser
 			}
 			else
 			{
-				//send a message "this file does not contains a bayesian net"
+				errorMessage="El archivo no contiene una red bayesiana (BNMODEL).";
+				return null;
 			}		
 		}
-		else
-		{
-			//sen a message "can not find the file or is not a xml file"
-		}
 		return red;
+	}
+
+	public String getErrorMessage()
+	{
+		return errorMessage;
 	}
 	/**
 	*Recive el elemento en el que estan todos las variables, para ontener cada una de ellas 
@@ -90,14 +96,14 @@ public class XMLParser
 			temp.name=var.getAttribute("NAME");
 			String xpos=var.getAttribute("XPOS");
 			String ypos=var.getAttribute("YPOS");
-			if(xpos!=null)
+			if(xpos.length()>0)
 				temp.x=(new Integer(xpos)).intValue();
-			if (ypos!=null)
+			if (ypos.length()>0)
 				temp.y=(new Integer(ypos)).intValue();
 
 			//obtener la descripcion
 			NodeList des=var.getElementsByTagName("DESCRIPTION");
-			if(des.getLength()>0)
+			if(des.getLength()>0 && des.item(0).getFirstChild()!=null)
 				temp.description=des.item(0).getFirstChild().getNodeValue();
 
 			//obtener los estados de la variable
@@ -106,6 +112,8 @@ public class XMLParser
 			{
 				for (int j=0;j<values.getLength();j++)
 				{
+					if (values.item(j).getFirstChild()==null)
+						continue;
 					String value=values.item(j).getFirstChild().getNodeValue();					
 					if(value!=null)
 						temp.values.addElement(value);					
@@ -176,13 +184,20 @@ public class XMLParser
 		Element dist=(Element)nodes.item(0);
 		NodeList tables = dist.getElementsByTagName("DIST");
 		int numTables=tables.getLength();
-		bansy21.Red.Node temp=red.inicio;
 		for (int i=0;i<numTables;i++)
 		{
 			//obtener la tabla
 			Element table=(Element)tables.item(i);
 			//OBTENER EL NOMBRE DE LA VARIBALE QUE SE TRATA
-			String nameN=((Element)(table.getElementsByTagName("PRIVATE")).item(0)).getAttribute("NAME");
+			NodeList privateNodes=table.getElementsByTagName("PRIVATE");
+			if (privateNodes.getLength()==0)
+				continue;
+			String nameN=((Element)privateNodes.item(0)).getAttribute("NAME");
+			bansy21.Red.Node temp=red.inicio;
+			while (temp!=null && !temp.name.equals(nameN))
+				temp=temp.sig;
+			if (temp==null)
+				continue;
 
 			//OBTENER EL NODO, PARA IR GUARDANDO LOS PADRES Y SU TABLA DE PROBABILIDAD
 
@@ -203,13 +218,17 @@ public class XMLParser
 			}
 			//obtener las probabilidades
 			NodeList dpis=table.getElementsByTagName("DPIS");
+			if (dpis.getLength()==0)
+				continue;
 			Element dpisE=(Element)dpis.item(0);
 			NodeList lines=dpisE.getElementsByTagName("DPI");
 			int con=lines.getLength();
 			temp.table=new Double[con][temp.values.size()];
 			for (int t=0;t<con;t++)
 			{
-				String lin=lines.item(0).getFirstChild().getNodeValue();
+				if (lines.item(t).getFirstChild()==null)
+					continue;
+				String lin=lines.item(t).getFirstChild().getNodeValue();
 				lin=lin.substring(1);				
 				String[] line=lin.split(" ");
 				for (int j=0;j<line.length;j++)
@@ -221,7 +240,6 @@ public class XMLParser
 				}				
 			}
 
-			temp=temp.sig;
 		}
 	}
 
@@ -255,11 +273,11 @@ public class XMLParser
 			document = builder.parse(f);
 		}	catch (SAXException se) 
 		{
-			// handle error
+			errorMessage="El XML no tiene un formato válido: "+se.getMessage();
 		} catch (IOException ioe) {
-		// handle error
+			errorMessage="No se pudo abrir el archivo: "+ioe.getMessage();
 		} catch (ParserConfigurationException pce) {
-		// handle error
+			errorMessage="No se pudo configurar el lector XML: "+pce.getMessage();
 		}
 		return document;
 	}

@@ -5,11 +5,13 @@ import bansy21.Gui.Algorithm;
 import bansy21.Utilerias.*;
 import bansy21.Red.*;
 import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
 
 public class Bayes9 extends Algorithm
 {
 	
 	public String baseName=null;
+	public String dataFileName=null;
 	int result=0;
 
 	/**
@@ -34,7 +36,20 @@ public class Bayes9 extends Algorithm
 		{
 			red=getRed();
 		}
-		catch(Exception e){};	
+		catch(Exception e)
+		{
+			println("Error al ejecutar Bayes9: "+e.getMessage());
+			setIndeterminate(false);
+			setNote("Error");
+			return;
+		}
+		if (!hasValidArcs(red))
+		{
+			println("Bayes9 no produjo una red valida.");
+			setIndeterminate(false);
+			setNote("Error");
+			return;
+		}
 		Calendar date2=Calendar.getInstance();													
 		println("Tiempo empleado: "+util.tiempoEmpleado(date1,date2));
 		parent.agregarRed(red,baseName+"_Bayes9");
@@ -49,38 +64,67 @@ public class Bayes9 extends Algorithm
 	public Red getRed() throws IOException,InterruptedException
 	{	
 		
-      ExecuteProcess e=new ExecuteProcess();      
 		println(baseName);
-      String na=getLocalDirName();
-		String[] com={na+"/bayes9", baseName};
-		Process p = e.execute(com);
+		File dataFile=new File(dataFileName==null ? baseName : dataFileName).getAbsoluteFile();
+		File executable=new File(getLocalDirName(), "bayes9.exe");
+		if (!executable.isFile())
+			executable=new File(getLocalDirName(), "bayes9");
+		if (!executable.isFile())
+			throw new IOException("No se encontró el ejecutable de Bayes9 en "+getLocalDirName());
+		String[] com={executable.getAbsolutePath(), dataFile.getAbsolutePath()};
+		ProcessBuilder builder=new ProcessBuilder(com);
+		builder.redirectErrorStream(true);
+		builder.directory(dataFile.getParentFile());
+		File outputFile=new File(dataFile.getParentFile(),"final_graph1.lsp");
+		if (outputFile.exists())
+			outputFile.delete();
+		Process p=builder.start();
       
 		println("Ejecutando proceso...");
-		String line;
-		BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
-    while ((line = input.readLine()) != null) 
+		final BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
+		Thread outputReader=new Thread(new Runnable()
 		{
-		 println(line);		
-    }
-    input.close();	
-		
-		if (result==0)//el proceso termino satisfactoriamente
-		{			
-			println("Proceso ejecutado satisfactoriamente");
-			//leer la red generada por el bayes9
-			Archivo2 a=new Archivo2();
-			inArco = a.leerArcosBayes9("final_graph1.lsp",inicio);
-			if (inArco!=null)
+			public void run()
 			{
-				println("Arcos leidos correctamente");
-				red.inArco=inArco;
-				red.varDep=getVarDep(red);
-				red = pro.probabilityTables(red);
+				try
+				{
+					String line;
+					while ((line=input.readLine()) != null)
+						println(line);
+				}
+				catch (IOException e)
+				{
+					println("No se pudo leer la salida de Bayes9: "+e.getMessage());
+				}
 			}
+		});
+		outputReader.start();
+		if (!p.waitFor(120, TimeUnit.SECONDS))
+		{
+			p.destroy();
+			throw new IOException("Bayes9 excedio el tiempo maximo de ejecucion (120 segundos).");
+		}
+		outputReader.join(2000);
+		result=p.exitValue();
+		
+		// Algunas versiones de bayes9.exe devuelven 44 aunque hayan generado
+		// correctamente el archivo final_graph1.lsp.
+		Archivo2 a=new Archivo2();
+		inArco = outputFile.isFile() ? a.leerArcosBayes9(outputFile.getAbsolutePath(),inicio) : null;
+		if (inArco!=null)
+		{
+			if (result!=0)
+				println("Bayes9 termino con codigo "+result+", pero produjo una red valida.");
+			else
+				println("Proceso ejecutado satisfactoriamente");
+			println("Arcos leidos correctamente");
+			red.inArco=inArco;
+			red.varDep=getVarDep(red);
+			red = pro.probabilityTables(red);
 		}
 		else
 		{
-			println("Proceso no ejecutado correctamente");
+			println("Proceso no ejecutado correctamente (codigo "+result+").");
 		}
 		//p.destroy();
 		return red;
@@ -102,6 +146,18 @@ public class Bayes9 extends Algorithm
 		}
 		System.out.println("<sdgagaergaregwe.,m");
 		return varDep;
+	}
+
+	private boolean hasValidArcs(Red candidate)
+	{
+		if (candidate==null || candidate.inicio==null || candidate.inArco==null)
+			return false;
+		for (Arco arc=candidate.inArco; arc!=null; arc=arc.sig)
+		{
+			if (arc.from==null || arc.to==null)
+				return false;
+		}
+		return true;
 	}
    
    
@@ -134,15 +190,16 @@ public class Bayes9 extends Algorithm
       String localDirName;
       
       //Use that name to get a URL to the directory we are executing in
-      java.net.URL myURL = this.getClass().getResource(getClassName());  //Open a URL to the our .class file
-      
-      //Clean up the URL and make a String with absolute path name
-      localDirName = myURL.getPath();  //Strip path to URL object out
-      localDirName = myURL.getPath().replaceAll("%20", " ");  //change %20 chars to spaces  
-      
-      //Get the current execution directory
-      localDirName = localDirName.substring(0,localDirName.lastIndexOf("/"));  //clean off the file name
-      
-      return localDirName;
+		java.net.URL myURL = this.getClass().getResource(getClassName());
+		if (myURL==null)
+			return new File(".").getAbsolutePath();
+		try
+		{
+			return new File(myURL.toURI()).getParentFile().getAbsolutePath();
+		}
+		catch (Exception e)
+		{
+			return new File(myURL.getPath()).getParentFile().getAbsolutePath();
+		}
    }
 }
